@@ -8,6 +8,7 @@ int main() {
     e.insert(4);
     e.insert(6);
     e.insert(3);
+    e.insert(3);
     e.insert(0);
 
     auto i =e.lower_bound(5);

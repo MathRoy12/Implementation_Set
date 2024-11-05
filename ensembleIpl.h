@@ -21,7 +21,10 @@ ensemble<TYPE>::ensemble(const ensemble<TYPE> &src)
 
 template<typename TYPE>
 ensemble<TYPE>::~ensemble() {
-    // compl�ter
+    clear();
+    delete m_avant->m_suiv[0];
+    delete m_avant;
+    m_avant = nullptr;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -71,7 +74,6 @@ typename ensemble<TYPE>::iterator ensemble<TYPE>::upper_bound(const TYPE &x) con
 
 template<typename TYPE>
 size_t ensemble<TYPE>::erase(const TYPE &VAL) {
-    // compl�ter
     return 0;
 }
 
