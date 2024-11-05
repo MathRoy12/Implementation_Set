@@ -30,7 +30,13 @@ ensemble<TYPE>::~ensemble() {
 
 template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::find(const TYPE &x) const {
-    // compl�ter
+    auto i = lower_bound(x);
+
+    if ( x < *i){
+        i = iterator(m_avant->m_prec[0]);
+    }
+
+    return i;
 }
 
 // lower_bound
@@ -39,42 +45,24 @@ typename ensemble<TYPE>::iterator ensemble<TYPE>::find(const TYPE &x) const {
 
 template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::lower_bound(const TYPE &t) const {
-    // compl�ter
-    size_t indexLevel = m_avant->m_suiv.size() - 1;
     cellule *c = m_avant;
-    cellule *prev_c = nullptr;
-    cellule *apres = m_avant->m_prec[0];
 
-    while (c->m_suiv[0] != apres)
-        if (t < *c->m_suiv[indexLevel]->m_contenu) {
-            prev_c = c->m_prec[indexLevel];
-            while (prev_c->m_prec[indexLevel] == m_avant && indexLevel != 0) {
-                indexLevel--;
-            }
-            if (prev_c->m_prec[indexLevel] != prev_c) {
-                if(prev_c->m_prec[indexLevel] == apres)
-                    break;
-                c = prev_c->m_prec[indexLevel];
-            } else
-                break;
-        } else if (*c->m_suiv[indexLevel]->m_contenu < t) {
-            prev_c = c->m_suiv[indexLevel];
-            while (prev_c->m_suiv[indexLevel] == apres && indexLevel != 0) {
-                indexLevel--;
-            }
-            if (prev_c->m_suiv[indexLevel] != prev_c) {
-                if(prev_c->m_suiv[indexLevel] == apres)
-                    break;
-                c = prev_c->m_suiv[indexLevel];
-            } else
-                break;
-        } else
-            break;
+    for (size_t i = c->m_suiv.size(); i > 0;) {
+        for (--i; c->m_suiv[i] != m_avant->m_prec[0]; c = c->m_suiv[i]) {
+            if (!(*c->m_suiv[i]->m_contenu < t)) { break; }
+        }
+    }
+
     return iterator(c->m_suiv[0]);
 }
 
 template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::upper_bound(const TYPE &x) const {
+    auto i = lower_bound(x);
+    if (!(x < *i)){
+        i++;
+    }
+    return i;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -84,6 +72,7 @@ typename ensemble<TYPE>::iterator ensemble<TYPE>::upper_bound(const TYPE &x) con
 template<typename TYPE>
 size_t ensemble<TYPE>::erase(const TYPE &VAL) {
     // compl�ter
+    return 0;
 }
 
 // erase(it)
@@ -92,4 +81,5 @@ size_t ensemble<TYPE>::erase(const TYPE &VAL) {
 template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::erase(iterator it) {
     // compl�ter
+    return iterator(nullptr);
 }
