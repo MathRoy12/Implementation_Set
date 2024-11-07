@@ -15,6 +15,12 @@ int main() {
     auto i2 =e.upper_bound(5);
     auto i3 =e.find(5);
 
+    size_t lsfk = e.erase(29);
+    size_t lsfk2 = e.erase(6);
+
+    ensemble<int> e2 (e);
+
     afficher(std::cout, e);
+    afficher(std::cout, e2);
     return 0;
 }

@@ -16,7 +16,9 @@
 template<typename TYPE>
 ensemble<TYPE>::ensemble(const ensemble<TYPE> &src)
         : ensemble() {
-    // compl�ter
+    for (auto it = src.begin(); it != src.end() ; ++it) {
+        insert(*it);
+    }
 }
 
 template<typename TYPE>
@@ -35,9 +37,11 @@ template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::find(const TYPE &x) const {
     auto i = lower_bound(x);
 
-    if ( x < *i){
+    if (i.m_pointeur == m_avant->m_prec[0])
         i = iterator(m_avant->m_prec[0]);
-    }
+    else if (x < *i)
+        i = iterator(m_avant->m_prec[0]);
+
 
     return i;
 }
@@ -74,7 +78,14 @@ typename ensemble<TYPE>::iterator ensemble<TYPE>::upper_bound(const TYPE &x) con
 
 template<typename TYPE>
 size_t ensemble<TYPE>::erase(const TYPE &VAL) {
-    return 0;
+    auto i = find(VAL);
+
+    if(i == m_avant->m_prec[0])
+        return 0;
+
+    erase(i);
+
+    return 1;
 }
 
 // erase(it)
@@ -82,6 +93,21 @@ size_t ensemble<TYPE>::erase(const TYPE &VAL) {
 
 template<typename TYPE>
 typename ensemble<TYPE>::iterator ensemble<TYPE>::erase(iterator it) {
-    // compl�ter
-    return iterator(nullptr);
+    if (it == m_avant || it == m_avant->m_prec[0] || it == nullptr)
+        return it;
+
+    cellule* cel_suiv = nullptr;
+    cellule* cel_prec = nullptr;
+    for (size_t i = 0; i < it.m_pointeur->m_suiv.size(); ++i) {
+        cel_suiv = it.m_pointeur->m_suiv[i];
+        cel_prec = it.m_pointeur->m_prec[i];
+
+        cel_suiv->m_prec[i] = it.m_pointeur->m_prec[i];
+        cel_prec->m_suiv[i] = it.m_pointeur->m_suiv[i];
+    }
+    auto ret_val = iterator(it.m_pointeur->m_suiv[0]);
+    delete it.m_pointeur;
+    m_taille--;
+
+    return ret_val;
 }
